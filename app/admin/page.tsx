@@ -46,14 +46,7 @@ export default function AdminPage() {
       bgColor: "bg-green-500/10",
       link: "/admin/bookings",
     },
-    {
-      title: "Total Users",
-      value: users?.length || 0,
-      icon: Users,
-      color: "text-purple-600",
-      bgColor: "bg-purple-500/10",
-      link: "/admin/users",
-    },
+    // Removed Users stat from main dashboard per requirement
     {
       title: "Total Revenue",
       value: `$${totalRevenue.toLocaleString()}`,
@@ -70,14 +63,7 @@ export default function AdminPage() {
       bgColor: "bg-yellow-500/10",
       link: "/admin/reviews",
     },
-    {
-      title: "Testimonials",
-      value: testimonials?.length || 0,
-      icon: MessageSquare,
-      color: "text-pink-600",
-      bgColor: "bg-pink-500/10",
-      link: "/admin/testimonials",
-    },
+    // Removed Testimonials stat per requirement
   ]
 
   return (
@@ -91,13 +77,13 @@ export default function AdminPage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 auto-rows-fr">
           {stats.map((stat) => {
             const Icon = stat.icon
             return (
-              <Link key={stat.title} href={stat.link}>
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardContent className="p-6">
+              <Link key={stat.title} href={stat.link} className="block h-full">
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                  <CardContent className="p-6 min-h-[120px] flex items-center">
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
@@ -133,18 +119,8 @@ export default function AdminPage() {
                   <span>View Bookings</span>
                 </Button>
               </Link>
-              <Link href="/admin/users">
-                <Button variant="outline" className="w-full h-auto py-4 flex-col gap-2 bg-transparent">
-                  <Users className="w-6 h-6" />
-                  <span>Manage Users</span>
-                </Button>
-              </Link>
-              <Link href="/admin/testimonials">
-                <Button variant="outline" className="w-full h-auto py-4 flex-col gap-2 bg-transparent">
-                  <MessageSquare className="w-6 h-6" />
-                  <span>Testimonials</span>
-                </Button>
-              </Link>
+              {/* Removed Manage Users quick action per requirement */}
+              {/* Removed Testimonials quick action per requirement */}
             </div>
           </CardContent>
         </Card>

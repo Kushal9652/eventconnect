@@ -20,7 +20,7 @@ import { useToast } from "@/hooks/use-toast"
 
 export default function BookEventPage({ params }: { params: { id: string } }) {
   const { user, isLoading } = useAuth()
-  const { events, addBooking } = useData()
+  const { events, bookings, addBooking } = useData()
   const router = useRouter()
   const { toast } = useToast()
   const [event, setEvent] = useState(events.find((e) => e.id === params.id))
@@ -30,8 +30,14 @@ export default function BookEventPage({ params }: { params: { id: string } }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    if (isLoading) return
+    if (!user) {
       router.push("/")
+      return
+    }
+    // Enforce user-only access; redirect admins/planners to their dashboards
+    if (user.role !== "user") {
+      router.push(user.role === "admin" ? "/admin" : "/planners")
     }
   }, [user, isLoading, router])
 
@@ -42,6 +48,14 @@ export default function BookEventPage({ params }: { params: { id: string } }) {
   if (isLoading || !user || !event) {
     return null
   }
+
+  // Prevent duplicate bookings for the same event by the same user
+  const alreadyBooked = bookings.some((b) => b.userId === user.id && b.eventId === event.id)
+  useEffect(() => {
+    if (alreadyBooked) {
+      router.push(`/events/${event.id}`)
+    }
+  }, [alreadyBooked, event.id, router])
 
   const urgencyOptions = [
     {
@@ -106,7 +120,7 @@ export default function BookEventPage({ params }: { params: { id: string } }) {
         date: date.toISOString(),
         time,
         urgency,
-        status: "confirmed",
+        status: "pending",
         totalPrice,
       })
 

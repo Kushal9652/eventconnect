@@ -5,6 +5,8 @@ import { useAuth } from "@/lib/auth-context"
 import { useData } from "@/lib/data-context"
 import { useRouter } from "next/navigation"
 import { AdminHeader } from "@/components/admin-header"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Star, Trash2 } from "lucide-react"
@@ -39,6 +41,12 @@ export default function AdminReviewsPage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
+          <Link href="/admin">
+            <Button variant="ghost" className="mb-4 gap-2">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Admin
+            </Button>
+          </Link>
           <h1 className="text-4xl font-bold mb-2">Manage Reviews</h1>
           <p className="text-xl text-muted-foreground">View and moderate event reviews</p>
         </div>

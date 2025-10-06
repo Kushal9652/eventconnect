@@ -5,6 +5,8 @@ import { useAuth } from "@/lib/auth-context"
 import { useData } from "@/lib/data-context"
 import { useRouter } from "next/navigation"
 import { AdminHeader } from "@/components/admin-header"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -31,6 +33,12 @@ export default function AdminUsersPage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
+          <Link href="/admin">
+            <Button variant="ghost" className="mb-4 gap-2">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Admin
+            </Button>
+          </Link>
           <h1 className="text-4xl font-bold mb-2">Manage Users</h1>
           <p className="text-xl text-muted-foreground">View all registered users</p>
         </div>
@@ -39,7 +47,7 @@ export default function AdminUsersPage() {
           {users.map((u) => {
             const userBookings = bookings.filter((b) => b.userId === u.id)
             return (
-              <Card key={u.id}>
+              <Card key={u.id} className="hover:shadow-lg transition-shadow border-border/60">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4 mb-4">
                     <Avatar className="w-12 h-12">
@@ -49,7 +57,9 @@ export default function AdminUsersPage() {
                     </Avatar>
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg mb-1">{u.name}</h3>
-                      <Badge variant={u.role === "admin" ? "default" : "secondary"}>{u.role}</Badge>
+                      <Badge variant={u.role === "admin" ? "default" : "secondary"} className="capitalize">
+                        {u.role}
+                      </Badge>
                     </div>
                   </div>
                   <div className="space-y-2 text-sm">

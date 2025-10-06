@@ -7,6 +7,8 @@ import { useAuth } from "@/lib/auth-context"
 import { useData } from "@/lib/data-context"
 import { useRouter } from "next/navigation"
 import { AdminHeader } from "@/components/admin-header"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -66,14 +68,14 @@ export default function AdminEventsPage() {
   const handleEdit = (event: Event) => {
     setEditingEvent(event)
     setFormData({
-      title: event.title,
-      description: event.description,
-      category: event.category,
-      location: event.location,
-      price: event.price,
-      capacity: event.capacity,
-      image: event.image,
-      featured: event.featured,
+      title: event.title || "",
+      description: event.description || "",
+      category: event.category || "Conference",
+      location: event.location || "",
+      price: typeof event.price === "number" ? event.price : 0,
+      capacity: typeof event.capacity === "number" ? event.capacity : 0,
+      image: event.image || "",
+      featured: Boolean(event.featured),
     })
     setIsDialogOpen(true)
   }
@@ -106,6 +108,12 @@ export default function AdminEventsPage() {
       <main className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
+            <Link href="/admin">
+              <Button variant="ghost" className="mb-4 gap-2">
+                <ArrowLeft className="w-4 h-4" />
+                Back to Admin
+              </Button>
+            </Link>
             <h1 className="text-4xl font-bold mb-2">Manage Events</h1>
             <p className="text-xl text-muted-foreground">Create and manage your events</p>
           </div>

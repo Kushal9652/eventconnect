@@ -5,6 +5,8 @@ import { useAuth } from "@/lib/auth-context"
 import { useData } from "@/lib/data-context"
 import { useRouter } from "next/navigation"
 import { AdminHeader } from "@/components/admin-header"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -51,6 +53,12 @@ export default function AdminBookingsPage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
+          <Link href="/admin">
+            <Button variant="ghost" className="mb-4 gap-2">
+              <ArrowLeft className="w-4 h-4" />
+              Back to Admin
+            </Button>
+          </Link>
           <h1 className="text-4xl font-bold mb-2">Manage Bookings</h1>
           <p className="text-xl text-muted-foreground">View and manage all event bookings</p>
         </div>

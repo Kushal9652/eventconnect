@@ -7,6 +7,8 @@ import { useAuth } from "@/lib/auth-context"
 import { useData } from "@/lib/data-context"
 import { useRouter } from "next/navigation"
 import { AdminHeader } from "@/components/admin-header"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -59,10 +61,10 @@ export default function AdminTestimonialsPage() {
   const handleEdit = (testimonial: Testimonial) => {
     setEditingTestimonial(testimonial)
     setFormData({
-      name: testimonial.name,
-      role: testimonial.role,
-      content: testimonial.content,
-      rating: testimonial.rating,
+      name: testimonial.name || "",
+      role: testimonial.role || "",
+      content: testimonial.content || "",
+      rating: typeof testimonial.rating === "number" ? testimonial.rating : 5,
     })
     setIsDialogOpen(true)
   }
@@ -91,6 +93,12 @@ export default function AdminTestimonialsPage() {
       <main className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
+            <Link href="/admin">
+              <Button variant="ghost" className="mb-4 gap-2">
+                <ArrowLeft className="w-4 h-4" />
+                Back to Admin
+              </Button>
+            </Link>
             <h1 className="text-4xl font-bold mb-2">Manage Testimonials</h1>
             <p className="text-xl text-muted-foreground">Create and manage customer testimonials</p>
           </div>

@@ -17,7 +17,7 @@ import { useParams } from "next/navigation"
 export default function EventDetailPage() {
   const params = useParams<{ id: string }>()
   const { user, isLoading } = useAuth()
-  const { events, reviews } = useData()
+  const { events, reviews, bookings } = useData()
   const router = useRouter()
   const [event, setEvent] = useState(events.find((e) => e.id === params.id))
 
@@ -34,6 +34,8 @@ export default function EventDetailPage() {
   if (isLoading || !user || !event) {
     return null
   }
+
+  const userHasBooked = bookings.some((b) => b.userId === user.id && b.eventId === event.id)
 
   const eventReviews = reviews.filter((r) => r.eventId === event.id)
 
@@ -131,7 +133,7 @@ export default function EventDetailPage() {
             )}
           </div>
 
-          {/* Booking Sidebar */}
+            {/* Booking Sidebar */}
           <div className="lg:col-span-1">
             <Card className="sticky top-24">
               <CardContent className="p-6">
@@ -142,12 +144,20 @@ export default function EventDetailPage() {
                   </div>
                   <p className="text-sm text-muted-foreground">Flexible dates and times available</p>
                 </div>
-
-                <Link href={`/events/${event.id}/book`}>
-                  <Button size="lg" className="w-full mb-4">
-                    Book This Event
-                  </Button>
-                </Link>
+                {user.role === "user" && !userHasBooked && (
+                  <Link href={`/events/${event.id}/book`}>
+                    <Button size="lg" className="w-full mb-4">
+                      Book This Event
+                    </Button>
+                  </Link>
+                )}
+                {userHasBooked && (
+                  <Link href="/dashboard/bookings">
+                    <Button size="lg" variant="secondary" className="w-full mb-4">
+                      View Your Booking
+                    </Button>
+                  </Link>
+                )}
 
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between">
