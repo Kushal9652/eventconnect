@@ -18,9 +18,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 
-export default function BookEventPage({ params }: { params: { id: string } }) {
+export default function BookEventPage({ params, searchParams }: { params: { id: string }; searchParams?: { companyId?: string } }) {
   const { user, isLoading } = useAuth()
-  const { events, bookings, addBooking } = useData()
+  const { events, bookings, addBooking, companies, offers } = useData()
   const router = useRouter()
   const { toast } = useToast()
   const [event, setEvent] = useState(events.find((e) => e.id === params.id))
@@ -28,6 +28,9 @@ export default function BookEventPage({ params }: { params: { id: string } }) {
   const [time, setTime] = useState("")
   const [urgency, setUrgency] = useState<"standard" | "priority" | "urgent">("standard")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const companyId = searchParams?.companyId
+  const selectedCompany = companies.find((c) => c.id === companyId)
+  const offer = offers.find((o) => o.eventId === params.id && o.companyId === companyId)
 
   useEffect(() => {
     if (isLoading) return
@@ -82,7 +85,8 @@ export default function BookEventPage({ params }: { params: { id: string } }) {
   ]
 
   const selectedUrgencyOption = urgencyOptions.find((opt) => opt.value === urgency)!
-  const totalPrice = Math.round(event.price * selectedUrgencyOption.multiplier)
+  const basePrice = offer ? offer.price : event.price
+  const totalPrice = Math.round(basePrice * selectedUrgencyOption.multiplier)
 
   const timeSlots = [
     "09:00 AM",
@@ -102,6 +106,16 @@ export default function BookEventPage({ params }: { params: { id: string } }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    if (!companyId || !selectedCompany) {
+      toast({
+        title: "Select a company",
+        description: "Please choose a company before booking",
+        variant: "destructive",
+      })
+      router.push(`/events/${event.id}/company`)
+      return
+    }
+
     if (!date || !time) {
       toast({
         title: "Missing information",
@@ -117,6 +131,7 @@ export default function BookEventPage({ params }: { params: { id: string } }) {
       addBooking({
         userId: user.id,
         eventId: event.id,
+        companyId,
         date: date.toISOString(),
         time,
         urgency,
@@ -163,6 +178,13 @@ export default function BookEventPage({ params }: { params: { id: string } }) {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-8">
+                  {/* Company Summary */}
+                  {selectedCompany && (
+                    <div className="space-y-1">
+                      <Label className="text-lg font-semibold">Selected Company</Label>
+                      <div className="text-sm">{selectedCompany.name}</div>
+                    </div>
+                  )}
                   {/* Date Selection */}
                   <div className="space-y-3">
                     <Label className="text-lg font-semibold flex items-center gap-2">
@@ -275,10 +297,10 @@ export default function BookEventPage({ params }: { params: { id: string } }) {
                   <h3 className="font-semibold text-lg mb-1">{event.title}</h3>
                   <p className="text-sm text-muted-foreground">{event.location}</p>
                 </div>
-                <div className="space-y-2 pt-4 border-t border-border">
+                  <div className="space-y-2 pt-4 border-t border-border">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Base Price</span>
-                    <span className="font-medium">${event.price}</span>
+                    <span className="font-medium">${basePrice}</span>
                   </div>
                   {date && (
                     <div className="flex justify-between text-sm">

@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 
 export default function PlannerDashboardPage() {
   const { user, isLoading } = useAuth()
-  const { bookings, events, updateBooking } = useData()
+  const { bookings, events, companies, updateBooking } = useData()
   const router = useRouter()
 
   useEffect(() => {
@@ -45,6 +45,7 @@ export default function PlannerDashboardPage() {
               <div className="space-y-4">
                 {pendingBookings.map((b) => {
                   const ev = events.find((e) => e.id === b.eventId)!
+                  const company = companies.find((c) => c.id === b.companyId)
                   return (
                     <div key={b.id} className="p-4 border rounded-lg flex items-center justify-between">
                       <div>
@@ -52,6 +53,7 @@ export default function PlannerDashboardPage() {
                         <p className="text-sm text-muted-foreground">
                           {new Date(b.date).toLocaleDateString()} • {b.time} • ₹{b.totalPrice}
                         </p>
+                        {company && <p className="text-xs text-muted-foreground">Company: {company.name}</p>}
                       </div>
                       <div className="flex gap-2">
                         <Button variant="outline" onClick={() => rejectBooking(b.id)}>Reject</Button>

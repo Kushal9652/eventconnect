@@ -27,6 +27,7 @@ export interface Booking {
   id: string
   userId: string
   eventId: string
+  companyId: string
   date: string
   time: string
   urgency: "standard" | "priority" | "urgent"
@@ -63,5 +64,24 @@ export interface Query {
   message: string
   status: "open" | "assigned" | "resolved"
   assignedTo?: string
+  createdAt: string
+}
+
+export interface Company {
+  id: string
+  name: string
+  description?: string
+  logo?: string
+  createdAt: string
+}
+
+export interface EventCompanyOffer {
+  id: string
+  eventId: string
+  companyId: string
+  price: number
+  galleryImages?: string[]
+  policies?: string[]
+  testimonials?: { id: string; userName: string; comment: string; rating: number }[]
   createdAt: string
 }

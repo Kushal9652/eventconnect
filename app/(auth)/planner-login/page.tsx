@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { ArrowLeft } from "lucide-react"
+import Link from "next/link"
 import { LandingHeader } from "@/components/landing-header"
 
 export default function PlannerLoginPage() {
@@ -28,6 +30,12 @@ export default function PlannerLoginPage() {
     <div className="min-h-screen">
       <LandingHeader />
       <main className="container mx-auto px-4 pt-28 pb-12 max-w-md">
+        <Link href="/">
+          <Button variant="ghost" className="mb-4 gap-2">
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </Button>
+        </Link>
         <Card>
           <CardHeader>
             <CardTitle>Event Planner Sign In</CardTitle>

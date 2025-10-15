@@ -145,9 +145,9 @@ export default function EventDetailPage() {
                   <p className="text-sm text-muted-foreground">Flexible dates and times available</p>
                 </div>
                 {user.role === "user" && !userHasBooked && (
-                  <Link href={`/events/${event.id}/book`}>
+                  <Link href={`/events/${event.id}/company`}>
                     <Button size="lg" className="w-full mb-4">
-                      Book This Event
+                      Choose Company
                     </Button>
                   </Link>
                 )}

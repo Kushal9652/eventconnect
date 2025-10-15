@@ -15,7 +15,7 @@ import { useToast } from "@/hooks/use-toast"
 
 export default function AdminBookingsPage() {
   const { user, isLoading } = useAuth()
-  const { bookings, events, users, updateBooking } = useData()
+  const { bookings, events, users, companies, updateBooking } = useData()
   const router = useRouter()
   const { toast } = useToast()
 
@@ -67,6 +67,7 @@ export default function AdminBookingsPage() {
           {bookings.map((booking) => {
             const event = events.find((e) => e.id === booking.eventId)
             const bookingUser = users.find((u) => u.id === booking.userId)
+            const company = companies.find((c) => c.id === booking.companyId)
             if (!event || !bookingUser) return null
 
             return (
@@ -112,6 +113,12 @@ export default function AdminBookingsPage() {
                           <p className="text-sm text-muted-foreground mb-1">Total</p>
                           <span className="font-bold text-primary text-lg">${booking.totalPrice}</span>
                         </div>
+                        {company && (
+                          <div className="col-span-2">
+                            <p className="text-sm text-muted-foreground mb-1">Company</p>
+                            <span className="font-medium">{company.name}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="flex lg:flex-col gap-2">

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth-context"
 import { useRouter } from "next/navigation"
-import { Sparkles, LogOut, LayoutDashboard } from "lucide-react"
+import { Sparkles, LogOut, LayoutDashboard, Building2, Tag } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,6 +32,18 @@ export function AdminHeader() {
           <span className="text-xl font-semibold">EventConnect Admin</span>
         </Link>
         <nav className="flex items-center gap-4">
+          <Link href="/admin/companies">
+            <Button variant="ghost" className="gap-2">
+              <Building2 className="w-4 h-4" />
+              Companies
+            </Button>
+          </Link>
+          <Link href="/admin/offers">
+            <Button variant="ghost" className="gap-2">
+              <Tag className="w-4 h-4" />
+              Offers
+            </Button>
+          </Link>
           <Link href="/dashboard">
             <Button variant="ghost" className="gap-2">
               <LayoutDashboard className="w-4 h-4" />

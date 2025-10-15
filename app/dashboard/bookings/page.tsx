@@ -14,7 +14,7 @@ import Link from "next/link"
 
 export default function BookingsPage() {
   const { user, isLoading } = useAuth()
-  const { bookings, events } = useData()
+  const { bookings, events, companies } = useData()
   const router = useRouter()
 
   useEffect(() => {
@@ -67,6 +67,7 @@ export default function BookingsPage() {
           <div className="space-y-4">
             {userBookings.map((booking) => {
               const event = events.find((e) => e.id === booking.eventId)
+              const company = companies.find((c) => c.id === booking.companyId)
               if (!event) return null
 
               return (
@@ -115,6 +116,12 @@ export default function BookingsPage() {
                             <p className="text-sm text-muted-foreground mb-1">Total</p>
                             <span className="font-bold text-primary">${booking.totalPrice}</span>
                           </div>
+                          {company && (
+                            <div className="col-span-2">
+                              <p className="text-sm text-muted-foreground mb-1">Company</p>
+                              <span className="font-medium">{company.name}</span>
+                            </div>
+                          )}
                         </div>
                         <div className="flex gap-2">
                           <Link href={`/events/${event.id}`}>

@@ -1,8 +1,8 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
-import type { Event, Booking, Review, Testimonial, Query, User } from "./types"
-import { mockEvents, mockTestimonials, mockUsers } from "./mock-data"
+import type { Event, Booking, Review, Testimonial, Query, User, Company, EventCompanyOffer } from "./types"
+import { mockEvents, mockTestimonials, mockUsers, mockCompanies, mockEventCompanyOffers } from "./mock-data"
 
 interface DataContextType {
   events: Event[]
@@ -11,8 +11,16 @@ interface DataContextType {
   testimonials: Testimonial[]
   queries: Query[]
   users: User[]
+  companies: Company[]
+  offers: EventCompanyOffer[]
   addBooking: (booking: Omit<Booking, "id" | "createdAt">) => void
   updateBooking: (id: string, updates: Partial<Booking>) => void
+  addCompany: (company: Omit<Company, "id" | "createdAt">) => void
+  updateCompany: (id: string, updates: Partial<Company>) => void
+  deleteCompany: (id: string) => void
+  addOffer: (offer: Omit<EventCompanyOffer, "id" | "createdAt">) => void
+  updateOffer: (id: string, updates: Partial<EventCompanyOffer>) => void
+  deleteOffer: (id: string) => void
   addReview: (review: Omit<Review, "id">) => void
   deleteReview: (id: string) => void
   addEvent: (event: Omit<Event, "id" | "createdAt">) => void
@@ -36,6 +44,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
   const [queries, setQueries] = useState<Query[]>([])
   const [users, setUsers] = useState<User[]>([])
+  const [companies, setCompanies] = useState<Company[]>([])
+  const [offers, setOffers] = useState<EventCompanyOffer[]>([])
 
   useEffect(() => {
     const storedEvents = localStorage.getItem("eventconnect_events")
@@ -44,6 +54,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
     const storedTestimonials = localStorage.getItem("eventconnect_testimonials")
     const storedQueries = localStorage.getItem("eventconnect_queries")
     const storedUsers = localStorage.getItem("eventconnect_users")
+    const storedCompanies = localStorage.getItem("eventconnect_companies")
+    const storedOffers = localStorage.getItem("eventconnect_offers")
 
     setEvents(storedEvents ? JSON.parse(storedEvents) : mockEvents)
     setBookings(storedBookings ? JSON.parse(storedBookings) : [])
@@ -51,6 +63,20 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setTestimonials(storedTestimonials ? JSON.parse(storedTestimonials) : mockTestimonials)
     setQueries(storedQueries ? JSON.parse(storedQueries) : [])
     setUsers(storedUsers ? JSON.parse(storedUsers) : mockUsers)
+    // Merge persisted companies with defaults to keep referenced mock companies (c1/c2/c3)
+    if (storedCompanies) {
+      try {
+        const persisted: Company[] = JSON.parse(storedCompanies)
+        const byId = new Map<string, Company>()
+        ;[...mockCompanies, ...persisted].forEach((c) => byId.set(c.id, c))
+        setCompanies(Array.from(byId.values()))
+      } catch {
+        setCompanies(mockCompanies)
+      }
+    } else {
+      setCompanies(mockCompanies)
+    }
+    setOffers(storedOffers ? JSON.parse(storedOffers) : mockEventCompanyOffers)
   }, [])
 
   useEffect(() => {
@@ -77,6 +103,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("eventconnect_users", JSON.stringify(users))
   }, [users])
 
+  useEffect(() => {
+    localStorage.setItem("eventconnect_companies", JSON.stringify(companies))
+  }, [companies])
+
+  useEffect(() => {
+    localStorage.setItem("eventconnect_offers", JSON.stringify(offers))
+  }, [offers])
+
   const addBooking = (booking: Omit<Booking, "id" | "createdAt">) => {
     const newBooking: Booking = {
       ...booking,
@@ -84,6 +118,42 @@ export function DataProvider({ children }: { children: ReactNode }) {
       createdAt: new Date().toISOString(),
     }
     setBookings((prev) => [...prev, newBooking])
+  }
+
+  const addCompany = (company: Omit<Company, "id" | "createdAt">) => {
+    const newCompany: Company = {
+      ...company,
+      id: `company_${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    }
+    setCompanies((prev) => [...prev, newCompany])
+  }
+
+  const updateCompany = (id: string, updates: Partial<Company>) => {
+    setCompanies((prev) => prev.map((c) => (c.id === id ? { ...c, ...updates } : c)))
+  }
+
+  const deleteCompany = (id: string) => {
+    setCompanies((prev) => prev.filter((c) => c.id !== id))
+    // Also remove offers associated with this company
+    setOffers((prev) => prev.filter((o) => o.companyId !== id))
+  }
+
+  const addOffer = (offer: Omit<EventCompanyOffer, "id" | "createdAt">) => {
+    const newOffer: EventCompanyOffer = {
+      ...offer,
+      id: `offer_${Date.now()}`,
+      createdAt: new Date().toISOString(),
+    }
+    setOffers((prev) => [...prev, newOffer])
+  }
+
+  const updateOffer = (id: string, updates: Partial<EventCompanyOffer>) => {
+    setOffers((prev) => prev.map((o) => (o.id === id ? { ...o, ...updates } : o)))
+  }
+
+  const deleteOffer = (id: string) => {
+    setOffers((prev) => prev.filter((o) => o.id !== id))
   }
 
   const updateBooking = (id: string, updates: Partial<Booking>) => {
@@ -196,8 +266,16 @@ export function DataProvider({ children }: { children: ReactNode }) {
         testimonials,
         queries,
         users,
+        companies,
+        offers,
         addBooking,
         updateBooking,
+        addCompany,
+        updateCompany,
+        deleteCompany,
+        addOffer,
+        updateOffer,
+        deleteOffer,
         addReview,
         deleteReview,
         addEvent,

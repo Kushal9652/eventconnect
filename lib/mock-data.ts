@@ -1,4 +1,4 @@
-import type { Event, Testimonial, User } from "./types"
+import type { Event, Testimonial, User, Company, EventCompanyOffer } from "./types"
 
 export const mockEvents: Event[] = [
   {
@@ -153,5 +153,107 @@ export const mockUsers: User[] = [
     name: "Planner User",
     role: "planner",
     createdAt: "2024-01-02T10:00:00Z",
+  },
+]
+
+export const mockCompanies: Company[] = [
+  {
+    id: "c1",
+    name: "ABC Company",
+    description: "Full-service event planning and management",
+    logo: "/placeholder-logo.png",
+    createdAt: "2024-01-01T10:00:00Z",
+  },
+  {
+    id: "c2",
+    name: "Yellow Company",
+    description: "Creative decor and experiential design",
+    logo: "/placeholder-logo.png",
+    createdAt: "2024-01-05T10:00:00Z",
+  },
+  {
+    id: "c3",
+    name: "Blue Events",
+    description: "Corporate events and conferences",
+    logo: "/placeholder-logo.png",
+    createdAt: "2024-01-10T10:00:00Z",
+  },
+]
+
+export const mockEventCompanyOffers: EventCompanyOffer[] = [
+  // Event 1 offers
+  {
+    id: "o1",
+    eventId: "1",
+    companyId: "c1",
+    price: 260000,
+    galleryImages: [
+      "/sunset-beach-wedding-romantic-ceremony.jpg",
+      "/elegant-garden-party-outdoor-celebration.jpg",
+    ],
+    policies: ["50% advance", "Full refund 30 days prior", "No pets allowed"],
+    testimonials: [
+      { id: "t1", userName: "Aarav", comment: "Flawless wedding execution!", rating: 5 },
+    ],
+    createdAt: "2024-03-01T10:00:00Z",
+  },
+  {
+    id: "o2",
+    eventId: "1",
+    companyId: "c2",
+    price: 255000,
+    galleryImages: [
+      "/art-gallery-opening-contemporary-exhibition.jpg",
+      "/corporate-team-building-activities-professional.jpg",
+    ],
+    policies: ["40% advance", "Reschedule allowed once", "Decor damages billed"],
+    testimonials: [
+      { id: "t2", userName: "Diya", comment: "Creative decor and great team!", rating: 5 },
+    ],
+    createdAt: "2024-03-02T10:00:00Z",
+  },
+  {
+    id: "o3",
+    eventId: "1",
+    companyId: "c3",
+    price: 270000,
+    galleryImages: [
+      "/professional-woman-portrait.png",
+      "/professional-woman-smiling.png",
+    ],
+    policies: ["60% advance", "Non-refundable within 15 days", "Outdoor after 10PM not allowed"],
+    testimonials: [
+      { id: "t3", userName: "Kabir", comment: "Professional and on-time delivery.", rating: 4 },
+    ],
+    createdAt: "2024-03-03T10:00:00Z",
+  },
+  // Event 2 offers
+  {
+    id: "o4",
+    eventId: "2",
+    companyId: "c1",
+    price: 28000,
+    galleryImages: [
+      "/elegant-garden-party-outdoor-celebration.jpg",
+    ],
+    policies: ["Advance 30%", "Full refund 7 days prior"],
+    testimonials: [
+      { id: "t4", userName: "Meera", comment: "Perfect birthday setup!", rating: 5 },
+    ],
+    createdAt: "2024-03-04T10:00:00Z",
+  },
+  {
+    id: "o5",
+    eventId: "2",
+    companyId: "c2",
+    price: 26000,
+    galleryImages: [
+      "/art-gallery-opening-contemporary-exhibition.jpg",
+    ],
+    policies: ["Advance 40%", "Reschedule with fee"],
+    testimonials: [
+      { id: "t5", userName: "Riya", comment: "Loved the theme!", rating: 4 },
+    ],
+    createdAt: "2024-03-05T10:00:00Z",
   },
 ]
