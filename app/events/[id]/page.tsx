@@ -139,7 +139,7 @@ export default function EventDetailPage() {
               <CardContent className="p-6">
                 <div className="mb-6">
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="text-4xl font-bold text-primary">${event.price}</span>
+                    <span className="text-4xl font-bold text-primary">₹{event.price.toLocaleString()}</span>
                     <span className="text-muted-foreground">per booking</span>
                   </div>
                   <p className="text-sm text-muted-foreground">Flexible dates and times available</p>

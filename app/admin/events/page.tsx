@@ -262,7 +262,7 @@ export default function AdminEventsPage() {
                     <span className="text-muted-foreground">({event.reviewCount})</span>
                   </div>
                   <div className="flex items-center justify-between pt-2">
-                    <span className="text-2xl font-bold text-primary">${event.price}</span>
+                    <span className="text-2xl font-bold text-primary">₹{event.price.toLocaleString()}</span>
                     <div className="flex gap-2">
                       <Button size="sm" variant="outline" onClick={() => handleEdit(event)}>
                         <Pencil className="w-4 h-4" />

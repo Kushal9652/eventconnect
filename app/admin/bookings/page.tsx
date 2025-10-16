@@ -111,7 +111,7 @@ export default function AdminBookingsPage() {
                         </div>
                         <div>
                           <p className="text-sm text-muted-foreground mb-1">Total</p>
-                          <span className="font-bold text-primary text-lg">${booking.totalPrice}</span>
+                          <span className="font-bold text-primary text-lg">₹{booking.totalPrice.toLocaleString()}</span>
                         </div>
                         {company && (
                           <div className="col-span-2">

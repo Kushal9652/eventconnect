@@ -108,7 +108,7 @@ export default function CompanyDetailPage() {
                 {offer ? (
                   <>
                     <div className="text-muted-foreground mb-2">Price</div>
-                    <div className="text-3xl font-bold text-primary mb-4">${offer.price}</div>
+                    <div className="text-3xl font-bold text-primary mb-4">₹{offer.price.toLocaleString()}</div>
                     <Button onClick={() => router.push(`/events/${event.id}/book?companyId=${company.id}`)} className="w-full">
                       Choose {company.name}
                     </Button>

@@ -50,7 +50,7 @@ export function EventCard({ event }: EventCardProps) {
         </CardContent>
         <CardFooter className="p-6 pt-0">
           <div className="flex items-center justify-between w-full">
-            <span className="text-2xl font-bold text-primary">${event.price}</span>
+            <span className="text-2xl font-bold text-primary">₹{event.price.toLocaleString()}</span>
             <span className="text-sm text-muted-foreground">per booking</span>
           </div>
         </CardFooter>

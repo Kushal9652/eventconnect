@@ -7,7 +7,7 @@ export const mockEvents: Event[] = [
     description:
       "A grand shaadi experience with mandap decor, pheras, live dhol, and curated catering.",
     category: "Wedding",
-    price: 250000,
+    price: 85000,
     image: "/sunset-beach-wedding-romantic-ceremony.jpg",
     location: "Palace Grounds, Bengaluru",
     capacity: 500,
@@ -22,7 +22,7 @@ export const mockEvents: Event[] = [
     description:
       "Custom birthday decor, cake, photographer, and music for intimate gatherings.",
     category: "Birthday",
-    price: 25000,
+    price: 35000,
     image: "/elegant-garden-party-outdoor-celebration.jpg",
     location: "Koramangala, Bengaluru",
     capacity: 60,
@@ -37,7 +37,7 @@ export const mockEvents: Event[] = [
     description:
       "Vibrant haldi setup with marigold decor, live dhol, and candid photography.",
     category: "Ceremony",
-    price: 60000,
+    price: 45000,
     image: "/art-gallery-opening-contemporary-exhibition.jpg",
     location: "JP Nagar, Bengaluru",
     capacity: 150,
@@ -52,7 +52,7 @@ export const mockEvents: Event[] = [
     description:
       "Traditional seemantham with floral backdrop, return gifts, and light music.",
     category: "Ceremony",
-    price: 45000,
+    price: 30000,
     image: "/elegant-garden-party-outdoor-celebration.jpg",
     location: "Hyderabad",
     capacity: 120,
@@ -67,7 +67,7 @@ export const mockEvents: Event[] = [
     description:
       "Dance floor, DJ, stage lighting, and choreographer for a fun sangeet night.",
     category: "Wedding",
-    price: 90000,
+    price: 75000,
     image: "/corporate-team-building-activities-professional.jpg",
     location: "Mumbai",
     capacity: 300,
@@ -82,7 +82,7 @@ export const mockEvents: Event[] = [
     description:
       "Professional candid + traditional photography and cinematic videography package.",
     category: "Photography",
-    price: 120000,
+    price: 40000,
     image: "/professional-woman-portrait.png",
     location: "Chennai",
     capacity: 50,
@@ -186,7 +186,7 @@ export const mockEventCompanyOffers: EventCompanyOffer[] = [
     id: "o1",
     eventId: "1",
     companyId: "c1",
-    price: 260000,
+    price: 85000,
     galleryImages: [
       "/sunset-beach-wedding-romantic-ceremony.jpg",
       "/elegant-garden-party-outdoor-celebration.jpg",
@@ -201,7 +201,7 @@ export const mockEventCompanyOffers: EventCompanyOffer[] = [
     id: "o2",
     eventId: "1",
     companyId: "c2",
-    price: 255000,
+    price: 80000,
     galleryImages: [
       "/art-gallery-opening-contemporary-exhibition.jpg",
       "/corporate-team-building-activities-professional.jpg",
@@ -216,7 +216,7 @@ export const mockEventCompanyOffers: EventCompanyOffer[] = [
     id: "o3",
     eventId: "1",
     companyId: "c3",
-    price: 270000,
+    price: 90000,
     galleryImages: [
       "/professional-woman-portrait.png",
       "/professional-woman-smiling.png",
@@ -232,7 +232,7 @@ export const mockEventCompanyOffers: EventCompanyOffer[] = [
     id: "o4",
     eventId: "2",
     companyId: "c1",
-    price: 28000,
+    price: 35000,
     galleryImages: [
       "/elegant-garden-party-outdoor-celebration.jpg",
     ],
@@ -246,7 +246,7 @@ export const mockEventCompanyOffers: EventCompanyOffer[] = [
     id: "o5",
     eventId: "2",
     companyId: "c2",
-    price: 26000,
+    price: 32000,
     galleryImages: [
       "/art-gallery-opening-contemporary-exhibition.jpg",
     ],

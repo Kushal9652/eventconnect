@@ -60,7 +60,7 @@ export default function SelectCompanyPage() {
                       <div className="text-sm">
                         <div className="text-muted-foreground">{c.description}</div>
                         <div className="mt-2 font-semibold text-primary">
-                          {offer ? `$${offer.price}` : "No offer for this event"}
+                          {offer ? `₹${offer.price.toLocaleString()}` : "No offer for this event"}
                         </div>
                       </div>
                     </div>

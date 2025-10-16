@@ -190,7 +190,7 @@ export default function AdminOffersPage() {
                 <CardContent className="p-4 space-y-2">
                   <div className="font-semibold">{e.title}</div>
                   <div className="text-sm text-muted-foreground">{c.name}</div>
-                  <div className="text-primary font-bold">${o.price}</div>
+                  <div className="text-primary font-bold">₹{o.price.toLocaleString()}</div>
                   <div className="flex gap-2 pt-2">
                     <Button size="sm" variant="outline" onClick={() => onEdit(o.id)}>
                       <Pencil className="w-4 h-4" />

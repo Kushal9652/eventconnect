@@ -263,7 +263,7 @@ export default function BookEventPage({ params, searchParams }: { params: { id: 
                                   </div>
                                   <div className="text-right">
                                     <p className="text-xl font-bold text-primary">
-                                      ${Math.round(event.price * option.multiplier)}
+                                      ₹{Math.round(event.price * option.multiplier).toLocaleString()}
                                     </p>
                                   </div>
                                 </div>
@@ -300,7 +300,7 @@ export default function BookEventPage({ params, searchParams }: { params: { id: 
                   <div className="space-y-2 pt-4 border-t border-border">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Base Price</span>
-                    <span className="font-medium">${basePrice}</span>
+                    <span className="font-medium">₹{basePrice.toLocaleString()}</span>
                   </div>
                   {date && (
                     <div className="flex justify-between text-sm">
@@ -322,14 +322,14 @@ export default function BookEventPage({ params, searchParams }: { params: { id: 
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Priority Fee</span>
                       <span className="font-medium text-primary">
-                        +${Math.round(event.price * (selectedUrgencyOption.multiplier - 1))}
+                        +₹{Math.round(event.price * (selectedUrgencyOption.multiplier - 1)).toLocaleString()}
                       </span>
                     </div>
                   )}
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t border-border">
                   <span className="text-lg font-semibold">Total</span>
-                  <span className="text-3xl font-bold text-primary">${totalPrice}</span>
+                  <span className="text-3xl font-bold text-primary">₹{totalPrice.toLocaleString()}</span>
                 </div>
               </CardContent>
             </Card>

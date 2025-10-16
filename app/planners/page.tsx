@@ -51,7 +51,7 @@ export default function PlannerDashboardPage() {
                       <div>
                         <p className="font-semibold">{ev?.title}</p>
                         <p className="text-sm text-muted-foreground">
-                          {new Date(b.date).toLocaleDateString()} • {b.time} • ₹{b.totalPrice}
+                          {new Date(b.date).toLocaleDateString()} • {b.time} • ₹{b.totalPrice.toLocaleString()}
                         </p>
                         {company && <p className="text-xs text-muted-foreground">Company: {company.name}</p>}
                       </div>
