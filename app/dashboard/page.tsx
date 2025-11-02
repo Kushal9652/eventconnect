@@ -29,6 +29,12 @@ export default function DashboardPage() {
     return null
   }
 
+  // Redirect planners to their company dashboard
+  if (user.role === "planner") {
+    router.push("/planners")
+    return null
+  }
+
   // Get unique categories
   const categories = ["all", ...Array.from(new Set(events.map((e) => e.category)))]
 

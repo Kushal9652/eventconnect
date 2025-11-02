@@ -10,6 +10,8 @@ export interface User {
 
 export interface Event {
   id: string
+  plannerId?: string
+  companyId?: string
   title: string
   description: string
   category: string
@@ -72,6 +74,8 @@ export interface Company {
   name: string
   description?: string
   logo?: string
+  // optional owner (user id) who registered this company
+  ownerId?: string
   createdAt: string
 }
 

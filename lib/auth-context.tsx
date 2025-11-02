@@ -7,7 +7,7 @@ import { mockUsers } from "./mock-data"
 interface AuthContextType {
   user: User | null
   login: (email: string, password: string) => Promise<boolean>
-  signup: (email: string, password: string, name: string) => Promise<boolean>
+  signup: (email: string, password: string, name: string, role?: string) => Promise<boolean>
   logout: () => void
   isLoading: boolean
 }
@@ -60,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return false
   }
 
-  const signup = async (email: string, password: string, name: string): Promise<boolean> => {
+  const signup = async (email: string, password: string, name: string, role: string = "user"): Promise<boolean> => {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 500))
 
@@ -70,12 +70,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return false
     }
 
-    // Create new user
+    // Create new user (role can be 'user' or 'planner')
     const newUser: User = {
       id: `user_${Date.now()}`,
       email,
       name,
-      role: "user",
+      role: (role as User["role"]) || "user",
       createdAt: new Date().toISOString(),
     }
 

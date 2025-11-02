@@ -1,4 +1,5 @@
 import type { Event } from "@/lib/types"
+import { useData } from "@/lib/data-context"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { MapPin, Star, Users } from "lucide-react"
@@ -10,6 +11,8 @@ interface EventCardProps {
 }
 
 export function EventCard({ event }: EventCardProps) {
+  const { companies } = useData()
+  const company = companies.find((c) => c.id === event.companyId)
   return (
     <Link href={`/events/${event.id}`}>
       <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full group">
@@ -25,6 +28,7 @@ export function EventCard({ event }: EventCardProps) {
           )}
         </div>
         <CardContent className="p-6">
+          {company && <div className="text-xs text-muted-foreground mb-2">{company.name}</div>}
           <div className="flex items-center gap-2 mb-2">
             <Badge variant="secondary" className="text-xs">
               {event.category}

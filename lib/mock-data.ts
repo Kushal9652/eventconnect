@@ -3,12 +3,13 @@ import type { Event, Testimonial, User, Company, EventCompanyOffer } from "./typ
 export const mockEvents: Event[] = [
   {
     id: "1",
+    plannerId: "planner1",
     title: "Traditional Indian Wedding",
     description:
       "A grand shaadi experience with mandap decor, pheras, live dhol, and curated catering.",
     category: "Wedding",
     price: 85000,
-    image: "/sunset-beach-wedding-romantic-ceremony.jpg",
+  image: "https://source.unsplash.com/featured/?india,wedding,mandap",
     location: "Palace Grounds, Bengaluru",
     capacity: 500,
     featured: true,
@@ -18,12 +19,13 @@ export const mockEvents: Event[] = [
   },
   {
     id: "2",
+    plannerId: "planner1",
     title: "Birthday Celebration Package",
     description:
       "Custom birthday decor, cake, photographer, and music for intimate gatherings.",
     category: "Birthday",
     price: 35000,
-    image: "/elegant-garden-party-outdoor-celebration.jpg",
+  image: "https://source.unsplash.com/featured/?india,birthday,celebration",
     location: "Koramangala, Bengaluru",
     capacity: 60,
     featured: true,
@@ -33,12 +35,13 @@ export const mockEvents: Event[] = [
   },
   {
     id: "3",
+    plannerId: "planner1",
     title: "Engagement & Haldi Ceremony",
     description:
       "Vibrant haldi setup with marigold decor, live dhol, and candid photography.",
     category: "Ceremony",
     price: 45000,
-    image: "/art-gallery-opening-contemporary-exhibition.jpg",
+  image: "https://source.unsplash.com/featured/?india,engagement,haldi",
     location: "JP Nagar, Bengaluru",
     capacity: 150,
     featured: true,
@@ -53,7 +56,7 @@ export const mockEvents: Event[] = [
       "Traditional seemantham with floral backdrop, return gifts, and light music.",
     category: "Ceremony",
     price: 30000,
-    image: "/elegant-garden-party-outdoor-celebration.jpg",
+  image: "https://source.unsplash.com/featured/?india,baby-shower,seemantham",
     location: "Hyderabad",
     capacity: 120,
     featured: false,
@@ -68,7 +71,7 @@ export const mockEvents: Event[] = [
       "Dance floor, DJ, stage lighting, and choreographer for a fun sangeet night.",
     category: "Wedding",
     price: 75000,
-    image: "/corporate-team-building-activities-professional.jpg",
+  image: "https://source.unsplash.com/featured/?india,sangeet,dance",
     location: "Mumbai",
     capacity: 300,
     featured: false,
@@ -83,7 +86,7 @@ export const mockEvents: Event[] = [
       "Professional candid + traditional photography and cinematic videography package.",
     category: "Photography",
     price: 40000,
-    image: "/professional-woman-portrait.png",
+  image: "https://source.unsplash.com/featured/?india,photography,wedding",
     location: "Chennai",
     capacity: 50,
     featured: false,
@@ -98,7 +101,7 @@ export const mockTestimonials: Testimonial[] = [
     id: "1",
     userId: "user1",
     userName: "Sarah Mitchell",
-    userImage: "/professional-woman-portrait.png",
+  userImage: "https://source.unsplash.com/featured/?india,portrait,woman",
     rating: 5,
     comment:
       "EventConnect made planning our corporate gala effortless. The attention to detail and seamless booking process exceeded all expectations.",
@@ -109,7 +112,7 @@ export const mockTestimonials: Testimonial[] = [
     id: "2",
     userId: "user2",
     userName: "Michael Chen",
-    userImage: "/professional-man-portrait.png",
+  userImage: "https://source.unsplash.com/featured/?india,portrait,man",
     rating: 5,
     comment:
       "Our beach wedding was absolutely perfect. The team handled everything with such professionalism and care. Highly recommended!",
@@ -120,7 +123,7 @@ export const mockTestimonials: Testimonial[] = [
     id: "3",
     userId: "user3",
     userName: "Emily Rodriguez",
-    userImage: "/professional-woman-smiling.png",
+  userImage: "https://source.unsplash.com/featured/?india,portrait,smile",
     rating: 5,
     comment:
       "The Tech Summit was incredibly well-organized. From registration to execution, everything was flawless. Will definitely book again.",
@@ -131,7 +134,7 @@ export const mockTestimonials: Testimonial[] = [
     id: "4",
     userId: "user4",
     userName: "David Thompson",
-    userImage: "/business-professional-portrait.png",
+  userImage: "https://source.unsplash.com/featured/?india,business,portrait",
     rating: 4,
     comment: "Great experience overall. The platform is intuitive and the event coordination was top-notch.",
     featured: false,
@@ -161,21 +164,21 @@ export const mockCompanies: Company[] = [
     id: "c1",
     name: "ABC Company",
     description: "Full-service event planning and management",
-    logo: "/placeholder-logo.png",
+  logo: "https://source.unsplash.com/featured/?india,company,logo",
     createdAt: "2024-01-01T10:00:00Z",
   },
   {
     id: "c2",
     name: "Yellow Company",
     description: "Creative decor and experiential design",
-    logo: "/placeholder-logo.png",
+  logo: "https://source.unsplash.com/featured/?india,design,logo",
     createdAt: "2024-01-05T10:00:00Z",
   },
   {
     id: "c3",
     name: "Blue Events",
     description: "Corporate events and conferences",
-    logo: "/placeholder-logo.png",
+  logo: "https://source.unsplash.com/featured/?india,events,logo",
     createdAt: "2024-01-10T10:00:00Z",
   },
 ]
@@ -188,8 +191,8 @@ export const mockEventCompanyOffers: EventCompanyOffer[] = [
     companyId: "c1",
     price: 85000,
     galleryImages: [
-      "/sunset-beach-wedding-romantic-ceremony.jpg",
-      "/elegant-garden-party-outdoor-celebration.jpg",
+      "https://source.unsplash.com/featured/?india,wedding,mandap",
+      "https://source.unsplash.com/featured/?india,decor,marigold",
     ],
     policies: ["50% advance", "Full refund 30 days prior", "No pets allowed"],
     testimonials: [
@@ -203,8 +206,8 @@ export const mockEventCompanyOffers: EventCompanyOffer[] = [
     companyId: "c2",
     price: 80000,
     galleryImages: [
-      "/art-gallery-opening-contemporary-exhibition.jpg",
-      "/corporate-team-building-activities-professional.jpg",
+      "https://source.unsplash.com/featured/?india,decor,festival",
+      "https://source.unsplash.com/featured/?india,sangeet,dhol",
     ],
     policies: ["40% advance", "Reschedule allowed once", "Decor damages billed"],
     testimonials: [
@@ -218,8 +221,8 @@ export const mockEventCompanyOffers: EventCompanyOffer[] = [
     companyId: "c3",
     price: 90000,
     galleryImages: [
-      "/professional-woman-portrait.png",
-      "/professional-woman-smiling.png",
+      "https://source.unsplash.com/featured/?india,photography,candid",
+      "https://source.unsplash.com/featured/?india,photography,ceremony",
     ],
     policies: ["60% advance", "Non-refundable within 15 days", "Outdoor after 10PM not allowed"],
     testimonials: [
@@ -234,7 +237,7 @@ export const mockEventCompanyOffers: EventCompanyOffer[] = [
     companyId: "c1",
     price: 35000,
     galleryImages: [
-      "/elegant-garden-party-outdoor-celebration.jpg",
+      "https://source.unsplash.com/featured/?india,birthday,decor",
     ],
     policies: ["Advance 30%", "Full refund 7 days prior"],
     testimonials: [
@@ -248,7 +251,7 @@ export const mockEventCompanyOffers: EventCompanyOffer[] = [
     companyId: "c2",
     price: 32000,
     galleryImages: [
-      "/art-gallery-opening-contemporary-exhibition.jpg",
+      "https://source.unsplash.com/featured/?india,theme,party",
     ],
     policies: ["Advance 40%", "Reschedule with fee"],
     testimonials: [

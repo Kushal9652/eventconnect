@@ -15,6 +15,7 @@ import { Plus, Pencil, Trash2, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import GalleryPicker from "@/components/ui/gallery-picker"
 
 export default function AdminOffersPage() {
   const { user, isLoading } = useAuth()
@@ -160,8 +161,12 @@ export default function AdminOffersPage() {
                   <Input type="number" value={formData.price} onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })} />
                 </div>
                 <div>
-                  <Label>Gallery Images (one URL per line)</Label>
-                  <Textarea rows={3} value={formData.galleryImages} onChange={(e) => setFormData({ ...formData, galleryImages: e.target.value })} />
+                  <GalleryPicker
+                    label="Gallery Images"
+                    value={formData.galleryImages.split("\n").map((s) => s.trim()).filter(Boolean)}
+                    onChange={(arr) => setFormData({ ...formData, galleryImages: arr.join("\n") })}
+                    suggestions={events.map((e) => e.image).filter((s): s is string => Boolean(s))}
+                  />
                 </div>
                 <div>
                   <Label>Policies (one per line)</Label>

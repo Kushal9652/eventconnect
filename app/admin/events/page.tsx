@@ -21,6 +21,7 @@ import { Plus, Pencil, Trash2, Star } from "lucide-react"
 import Image from "next/image"
 import { useToast } from "@/hooks/use-toast"
 import type { Event } from "@/lib/data-context"
+import ImagePicker from "@/components/ui/image-picker"
 
 export default function AdminEventsPage() {
   const { user, isLoading } = useAuth()
@@ -200,12 +201,12 @@ export default function AdminEventsPage() {
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="image">Image URL</Label>
-                  <Input
+                  <ImagePicker
                     id="image"
+                    label="Image"
                     value={formData.image}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    placeholder="/placeholder.svg?height=400&width=600"
+                    onChange={(v: string) => setFormData({ ...formData, image: v })}
+                    suggestions={events.map((e) => e.image).filter((s): s is string => Boolean(s))}
                   />
                 </div>
                 <div className="flex items-center gap-2">

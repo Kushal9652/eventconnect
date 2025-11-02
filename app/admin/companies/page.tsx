@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Plus, Pencil, Trash2, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/hooks/use-toast"
+import ImagePicker from "@/components/ui/image-picker"
 
 export default function AdminCompaniesPage() {
   const { user, isLoading } = useAuth()
@@ -96,8 +97,13 @@ export default function AdminCompaniesPage() {
                   <Textarea id="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows={3} />
                 </div>
                 <div>
-                  <Label htmlFor="logo">Logo URL</Label>
-                  <Input id="logo" value={formData.logo} onChange={(e) => setFormData({ ...formData, logo: e.target.value })} />
+                  <ImagePicker
+                    id="logo"
+                    label="Logo"
+                    value={formData.logo}
+                    onChange={(v: string) => setFormData({ ...formData, logo: v })}
+                    suggestions={companies.map((c) => c.logo).filter((s): s is string => Boolean(s))}
+                  />
                 </div>
                 <div className="flex gap-2 pt-2">
                   <Button type="submit" className="flex-1">{editingId ? "Update" : "Create"}</Button>

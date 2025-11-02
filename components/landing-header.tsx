@@ -35,7 +35,7 @@ export function LandingHeader() {
             <span className="text-xl font-semibold">EventConnect</span>
           </div>
           <nav className="flex items-center gap-4">
-            <Button variant="ghost" onClick={() => router.push("/planners")}>Event Planners</Button>
+            <Button variant="ghost" onClick={() => router.push("/planners")}>Companies</Button>
             {user ? (
               <>
                 <Button variant="ghost" onClick={handleDashboard}>

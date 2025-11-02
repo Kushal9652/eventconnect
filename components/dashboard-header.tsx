@@ -24,6 +24,9 @@ export function DashboardHeader() {
     router.push("/")
   }
 
+  // Hide browse/bookings tabs for planners
+  const showBrowseTabs = user?.role !== "planner"
+
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -32,15 +35,19 @@ export function DashboardHeader() {
           <span className="text-xl font-semibold">EventConnect</span>
         </Link>
         <nav className="flex items-center gap-4">
-          <Link href="/dashboard">
-            <Button variant="ghost">Browse Events</Button>
-          </Link>
-          <Link href="/dashboard/bookings">
-            <Button variant="ghost" className="gap-2">
-              <Calendar className="w-4 h-4" />
-              My Bookings
-            </Button>
-          </Link>
+          {showBrowseTabs && (
+            <>
+              <Link href="/dashboard">
+                <Button variant="ghost">Browse Events</Button>
+              </Link>
+              <Link href="/dashboard/bookings">
+                <Button variant="ghost" className="gap-2">
+                  <Calendar className="w-4 h-4" />
+                  My Bookings
+                </Button>
+              </Link>
+            </>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
