@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useAuth } from "@/lib/auth-context"
 import { useData } from "@/lib/data-context"
 import { useRouter } from "next/navigation"
@@ -8,14 +8,15 @@ import { DashboardHeader } from "@/components/dashboard-header"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, MapPin, AlertCircle } from "lucide-react"
+import { Calendar, Clock, MapPin, AlertCircle, Trash2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
 export default function BookingsPage() {
   const { user, isLoading } = useAuth()
-  const { bookings, events, companies } = useData()
+  const { bookings, events, companies, deleteAllBookings } = useData()
   const router = useRouter()
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -28,6 +29,14 @@ export default function BookingsPage() {
   }
 
   const userBookings = bookings.filter((b) => b.userId === user.id)
+
+  const handleClearAllBookings = () => {
+    if (confirm("Are you sure you want to delete all your bookings? This action cannot be undone.")) {
+      setIsDeleting(true)
+      deleteAllBookings(user.id)
+      setIsDeleting(false)
+    }
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -59,8 +68,24 @@ export default function BookingsPage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">My Bookings</h1>
-          <p className="text-xl text-muted-foreground">Manage your event reservations</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold mb-2">My Bookings</h1>
+              <p className="text-xl text-muted-foreground">Manage your event reservations</p>
+            </div>
+            {userBookings.length > 0 && (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={handleClearAllBookings}
+                disabled={isDeleting}
+                className="gap-2"
+              >
+                <Trash2 className="w-4 h-4" />
+                {isDeleting ? "Clearing..." : "Clear All"}
+              </Button>
+            )}
+          </div>
         </div>
 
         {userBookings.length > 0 ? (

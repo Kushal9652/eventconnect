@@ -135,7 +135,6 @@ export default function BookEventPage({ params, searchParams }: { params: { id: 
         date: date.toISOString(),
         time,
         urgency,
-        status: "pending",
         totalPrice,
       })
 

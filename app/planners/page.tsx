@@ -9,11 +9,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
 import ImagePicker from "@/components/ui/image-picker"
+import GalleryPicker from "@/components/ui/gallery-picker"
+import { Check, X } from "lucide-react"
 
 export default function CompanyDashboardPage() {
   const { user, isLoading, login, signup } = useAuth()
-  const { events, companies, addCompany, addEvent, deleteEvent } = useData()
+  const { events, companies, bookings, offers, addCompany, addEvent, deleteEvent, updateBooking, addOffer, updateOffer, deleteOffer, users } = useData()
   const router = useRouter()
 
   useEffect(() => {
@@ -37,6 +41,7 @@ export default function CompanyDashboardPage() {
 
   const [eventForm, setEventForm] = useState({ title: "", price: "", location: "", capacity: "", image: "", description: "" })
   const [selectedCompanyId, setSelectedCompanyId] = useState<string>("")
+  const [offerForm, setOfferForm] = useState({ eventId: "", price: 0, galleryImages: "" as string | string[], policies: "", testimonials: "" })
 
   const handleLogin = async () => {
     const ok = await login(email, password)
@@ -85,6 +90,31 @@ export default function CompanyDashboardPage() {
 
   const handleDeleteEvent = (id: string) => {
     deleteEvent(id)
+  }
+
+  const handleCreateOffer = (companyId: string, eventId: string) => {
+    const galleryImagesArray = Array.isArray(offerForm.galleryImages) 
+      ? offerForm.galleryImages 
+      : offerForm.galleryImages.split("\n").map((s) => s.trim()).filter(Boolean)
+    
+    const policies = offerForm.policies
+      .split("\n")
+      .map((s) => s.trim())
+      .filter(Boolean)
+
+    addOffer({
+      eventId,
+      companyId,
+      price: offerForm.price,
+      galleryImages: galleryImagesArray,
+      policies,
+      testimonials: [],
+    })
+    setOfferForm({ eventId: "", price: 0, galleryImages: "", policies: "", testimonials: "" })
+  }
+
+  const handleUpdateOfferRequest = (bookingId: string, status: "confirmed" | "cancelled") => {
+    updateBooking(bookingId, { status })
   }
 
   // If not logged in, show auth UI
@@ -298,83 +328,214 @@ export default function CompanyDashboardPage() {
                 </div>
               </CardHeader>
               <CardContent className="pt-6">
-                {/* Create Event Section */}
-                <div className="mb-8 p-4 bg-secondary/30 rounded-lg border">
-                  <h4 className="font-semibold mb-4 text-lg">Create New Event</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                    <div className="space-y-1">
-                      <Label className="text-xs">Title</Label>
-                      <Input 
-                        placeholder="Event title" 
-                        value={eventForm.title} 
-                        onChange={(e) => setEventForm((s) => ({ ...s, title: e.target.value }))} 
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">Price (₹)</Label>
-                      <Input 
-                        placeholder="Price" 
-                        value={eventForm.price} 
-                        onChange={(e) => setEventForm((s) => ({ ...s, price: e.target.value }))} 
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">Location</Label>
-                      <Input 
-                        placeholder="Location" 
-                        value={eventForm.location} 
-                        onChange={(e) => setEventForm((s) => ({ ...s, location: e.target.value }))} 
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">Capacity</Label>
-                      <Input 
-                        placeholder="Capacity" 
-                        value={eventForm.capacity} 
-                        onChange={(e) => setEventForm((s) => ({ ...s, capacity: e.target.value }))} 
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">Image</Label>
-                      {/* ImagePicker: allow URL, upload, or choose from gallery */}
-                      <ImagePicker
-                        value={eventForm.image}
-                        onChange={(v: string) => setEventForm((s) => ({ ...s, image: v }))}
-                        suggestions={events.map((e) => e.image).filter((s): s is string => Boolean(s))}
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs">Description</Label>
-                      <Input 
-                        placeholder="Brief description" 
-                        value={eventForm.description} 
-                        onChange={(e) => setEventForm((s) => ({ ...s, description: e.target.value }))} 
-                      />
-                    </div>
-                  </div>
-                  <Button onClick={() => handleCreateEvent(c.id)} className="mt-4 w-full md:w-auto">Create Event</Button>
-                </div>
+                <Tabs defaultValue="events" className="w-full">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="events">Events</TabsTrigger>
+                    <TabsTrigger value="requests">Event Requests</TabsTrigger>
+                    <TabsTrigger value="offers">Offers</TabsTrigger>
+                  </TabsList>
 
-                {/* Events List */}
-                <div>
-                  <h4 className="font-semibold mb-4 text-lg">Events</h4>
-                  {events.filter((ev) => ev.companyId === c.id).length === 0 ? (
-                    <p className="text-muted-foreground py-4">No events created yet for this company</p>
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {events.filter((ev) => ev.companyId === c.id).map((ev) => (
-                        <div key={ev.id} className="p-4 border rounded-lg flex items-center justify-between hover:bg-secondary/30 transition-colors">
-                          <div className="flex-1">
-                            <p className="font-semibold text-sm">{ev.title}</p>
-                            <p className="text-xs text-muted-foreground mt-1">{ev.location}</p>
-                            <p className="text-xs text-muted-foreground">₹{ev.price.toLocaleString()}</p>
-                          </div>
-                          <Button variant="destructive" size="sm" onClick={() => handleDeleteEvent(ev.id)}>Delete</Button>
+                  {/* Events Tab */}
+                  <TabsContent value="events" className="space-y-4">
+                    {/* Create Event Section */}
+                    <div className="p-4 bg-secondary/30 rounded-lg border">
+                      <h4 className="font-semibold mb-4 text-lg">Create New Event</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div className="space-y-1">
+                          <Label className="text-xs">Title</Label>
+                          <Input 
+                            placeholder="Event title" 
+                            value={eventForm.title} 
+                            onChange={(e) => setEventForm((s) => ({ ...s, title: e.target.value }))} 
+                          />
                         </div>
-                      ))}
+                        <div className="space-y-1">
+                          <Label className="text-xs">Price (₹)</Label>
+                          <Input 
+                            placeholder="Price" 
+                            value={eventForm.price} 
+                            onChange={(e) => setEventForm((s) => ({ ...s, price: e.target.value }))} 
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs">Location</Label>
+                          <Input 
+                            placeholder="Location" 
+                            value={eventForm.location} 
+                            onChange={(e) => setEventForm((s) => ({ ...s, location: e.target.value }))} 
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs">Capacity</Label>
+                          <Input 
+                            placeholder="Capacity" 
+                            value={eventForm.capacity} 
+                            onChange={(e) => setEventForm((s) => ({ ...s, capacity: e.target.value }))} 
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs">Image</Label>
+                          <ImagePicker
+                            value={eventForm.image}
+                            onChange={(v: string) => setEventForm((s) => ({ ...s, image: v }))}
+                            suggestions={events.map((e) => e.image).filter((s): s is string => Boolean(s))}
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-xs">Description</Label>
+                          <Input 
+                            placeholder="Brief description" 
+                            value={eventForm.description} 
+                            onChange={(e) => setEventForm((s) => ({ ...s, description: e.target.value }))} 
+                          />
+                        </div>
+                      </div>
+                      <Button onClick={() => handleCreateEvent(c.id)} className="mt-4 w-full md:w-auto">Create Event</Button>
                     </div>
-                  )}
-                </div>
+
+                    {/* Events List */}
+                    <div>
+                      <h4 className="font-semibold mb-4 text-lg">Events</h4>
+                      {events.filter((ev) => ev.companyId === c.id).length === 0 ? (
+                        <p className="text-muted-foreground py-4">No events created yet for this company</p>
+                      ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {events.filter((ev) => ev.companyId === c.id).map((ev) => (
+                            <div key={ev.id} className="p-4 border rounded-lg flex items-center justify-between hover:bg-secondary/30 transition-colors">
+                              <div className="flex-1">
+                                <p className="font-semibold text-sm">{ev.title}</p>
+                                <p className="text-xs text-muted-foreground mt-1">{ev.location}</p>
+                                <p className="text-xs text-muted-foreground">₹{ev.price.toLocaleString()}</p>
+                              </div>
+                              <Button variant="destructive" size="sm" onClick={() => handleDeleteEvent(ev.id)}>Delete</Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </TabsContent>
+
+                  {/* Event Requests Tab */}
+                  <TabsContent value="requests" className="space-y-4">
+                    <h4 className="font-semibold text-lg">Incoming Event Requests</h4>
+                    {(() => {
+                      const companyRequests = bookings.filter(
+                        (b) => b.companyId === c.id && b.status === "pending"
+                      )
+                      return companyRequests.length === 0 ? (
+                        <p className="text-muted-foreground py-4">No pending event requests</p>
+                      ) : (
+                        <div className="space-y-3">
+                          {companyRequests.map((booking) => {
+                            const event = events.find((e) => e.id === booking.eventId)
+                            const customer = users.find((u) => u.id === booking.userId)
+                            if (!event || !customer) return null
+                            return (
+                              <Card key={booking.id}>
+                                <CardContent className="p-4 flex items-center justify-between">
+                                  <div>
+                                    <h5 className="font-semibold">{event.title}</h5>
+                                    <p className="text-sm text-muted-foreground">
+                                      Requested by {customer.name} on {new Date(booking.date).toLocaleDateString()} at {booking.time}
+                                    </p>
+                                    <p className="text-sm font-bold text-primary">Total: ₹{booking.totalPrice.toLocaleString()}</p>
+                                  </div>
+                                  <div className="flex gap-2">
+                                    <Button size="sm" onClick={() => handleUpdateOfferRequest(booking.id, "confirmed")} className="gap-1">
+                                      <Check className="w-4 h-4" />
+                                      Accept
+                                    </Button>
+                                    <Button size="sm" variant="destructive" onClick={() => handleUpdateOfferRequest(booking.id, "cancelled")} className="gap-1">
+                                      <X className="w-4 h-4" />
+                                      Reject
+                                    </Button>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            )
+                          })}
+                        </div>
+                      )
+                    })()}
+                  </TabsContent>
+
+                  {/* Offers Tab */}
+                  <TabsContent value="offers" className="space-y-4">
+                    <div className="p-4 bg-secondary/30 rounded-lg border">
+                      <h4 className="font-semibold mb-4 text-lg">Create Offer</h4>
+                      <div className="space-y-3">
+                        <div>
+                          <Label className="text-sm">Select Event</Label>
+                          <select
+                            className="w-full border rounded px-3 py-2"
+                            value={offerForm.eventId}
+                            onChange={(e) => setOfferForm((s) => ({ ...s, eventId: e.target.value }))}
+                          >
+                            <option value="">Choose an event...</option>
+                            {events.filter((ev) => ev.companyId === c.id).map((ev) => (
+                              <option key={ev.id} value={ev.id}>{ev.title}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <Label className="text-sm">Price (₹)</Label>
+                          <Input
+                            type="number"
+                            placeholder="Price"
+                            value={offerForm.price}
+                            onChange={(e) => setOfferForm((s) => ({ ...s, price: Number(e.target.value) }))}
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-sm">Gallery Images</Label>
+                          <GalleryPicker
+                            label=""
+                            value={Array.isArray(offerForm.galleryImages) ? offerForm.galleryImages : []}
+                            onChange={(arr) => setOfferForm((s) => ({ ...s, galleryImages: arr }))}
+                            suggestions={events.map((e) => e.image).filter((s): s is string => Boolean(s))}
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-sm">Policies (one per line)</Label>
+                          <textarea
+                            rows={3}
+                            className="w-full border rounded px-3 py-2"
+                            placeholder="Enter policies..."
+                            value={offerForm.policies}
+                            onChange={(e) => setOfferForm((s) => ({ ...s, policies: e.target.value }))}
+                          />
+                        </div>
+                        <Button onClick={() => handleCreateOffer(c.id, offerForm.eventId)} className="w-full">Create Offer</Button>
+                      </div>
+                    </div>
+
+                    {/* Offers List */}
+                    <div>
+                      <h4 className="font-semibold mb-4 text-lg">Company Offers</h4>
+                      {(() => {
+                        const companyOffers = offers.filter((o) => o.companyId === c.id)
+                        return companyOffers.length === 0 ? (
+                          <p className="text-muted-foreground py-4">No offers created yet</p>
+                        ) : (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {companyOffers.map((offer) => {
+                              const event = events.find((e) => e.id === offer.eventId)
+                              return event ? (
+                                <Card key={offer.id}>
+                                  <CardContent className="p-4">
+                                    <h5 className="font-semibold">{event.title}</h5>
+                                    <p className="text-sm text-muted-foreground">₹{offer.price.toLocaleString()}</p>
+                                    <p className="text-xs text-muted-foreground mt-1">{offer.policies?.length || 0} policies</p>
+                                  </CardContent>
+                                </Card>
+                              ) : null
+                            })}
+                          </div>
+                        )
+                      })()}
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </CardContent>
             </Card>
           ))}

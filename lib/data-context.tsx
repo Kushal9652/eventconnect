@@ -15,6 +15,8 @@ interface DataContextType {
   offers: EventCompanyOffer[]
   addBooking: (booking: Omit<Booking, "id" | "createdAt">) => void
   updateBooking: (id: string, updates: Partial<Booking>) => void
+  deleteBooking: (id: string) => void
+  deleteAllBookings: (userId: string) => void
   addCompany: (company: Omit<Company, "id" | "createdAt">) => void
   updateCompany: (id: string, updates: Partial<Company>) => void
   deleteCompany: (id: string) => void
@@ -118,6 +120,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
       createdAt: new Date().toISOString(),
     }
     setBookings((prev) => [...prev, newBooking])
+  }
+
+  const deleteBooking = (id: string) => {
+    setBookings((prev) => prev.filter((b) => b.id !== id))
+  }
+
+  const deleteAllBookings = (userId: string) => {
+    setBookings((prev) => prev.filter((b) => b.userId !== userId))
   }
 
   const addCompany = (company: Omit<Company, "id" | "createdAt">) => {
@@ -270,6 +280,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
         offers,
         addBooking,
         updateBooking,
+        deleteBooking,
+        deleteAllBookings,
         addCompany,
         updateCompany,
         deleteCompany,

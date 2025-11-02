@@ -33,7 +33,7 @@ export interface Booking {
   date: string
   time: string
   urgency: "standard" | "priority" | "urgent"
-  status: "pending" | "confirmed" | "cancelled"
+  status: "pending" | "confirmed" | "rejected"
   totalPrice: number
   createdAt: string
 }
