@@ -132,6 +132,7 @@ export default function BookEventPage({ params, searchParams }: { params: { id: 
         userId: user.id,
         eventId: event.id,
         companyId,
+        status: "pending",
         date: date.toISOString(),
         time,
         urgency,

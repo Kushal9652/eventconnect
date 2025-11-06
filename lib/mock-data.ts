@@ -1,4 +1,4 @@
-import type { Event, Testimonial, User, Company, EventCompanyOffer } from "./types"
+import type { Event, Testimonial, User, Company, EventCompanyOffer, Booking } from "./types"
 
 export const mockEvents: Event[] = [
   {
@@ -164,21 +164,24 @@ export const mockCompanies: Company[] = [
     id: "c1",
     name: "ABC Company",
     description: "Full-service event planning and management",
-  logo: "https://source.unsplash.com/featured/?india,company,logo",
+    logo: "https://source.unsplash.com/featured/?india,company,logo",
+    ownerId: "planner1",
     createdAt: "2024-01-01T10:00:00Z",
   },
   {
     id: "c2",
     name: "Yellow Company",
     description: "Creative decor and experiential design",
-  logo: "https://source.unsplash.com/featured/?india,design,logo",
+    logo: "https://source.unsplash.com/featured/?india,design,logo",
+    ownerId: "planner1",
     createdAt: "2024-01-05T10:00:00Z",
   },
   {
     id: "c3",
     name: "Blue Events",
     description: "Corporate events and conferences",
-  logo: "https://source.unsplash.com/featured/?india,events,logo",
+    logo: "https://source.unsplash.com/featured/?india,events,logo",
+    ownerId: "planner1",
     createdAt: "2024-01-10T10:00:00Z",
   },
 ]
@@ -258,5 +261,32 @@ export const mockEventCompanyOffers: EventCompanyOffer[] = [
       { id: "t5", userName: "Riya", comment: "Loved the theme!", rating: 4 },
     ],
     createdAt: "2024-03-05T10:00:00Z",
+  },
+]
+
+export const mockBookings: Booking[] = [
+  {
+    id: "booking_1",
+    userId: "user1",
+    eventId: "1",
+    companyId: "c1",
+    date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    time: "10:00 AM",
+    urgency: "standard",
+    status: "pending",
+    totalPrice: 85000,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "booking_2",
+    userId: "user2",
+    eventId: "2",
+    companyId: "c2",
+    date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+    time: "02:00 PM",
+    urgency: "priority",
+    status: "pending",
+    totalPrice: 52500,
+    createdAt: new Date().toISOString(),
   },
 ]

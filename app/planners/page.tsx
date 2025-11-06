@@ -20,6 +20,24 @@ export default function CompanyDashboardPage() {
   const { events, companies, bookings, offers, addCompany, addEvent, deleteEvent, updateBooking, addOffer, updateOffer, deleteOffer, users } = useData()
   const router = useRouter()
 
+  // All state declarations must be at the top
+  const [, forceUpdate] = useState({})
+  const [showLogin, setShowLogin] = useState(true)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [name, setName] = useState("")
+  const [companyName, setCompanyName] = useState("")
+  const [companyDesc, setCompanyDesc] = useState("")
+  const [eventForm, setEventForm] = useState({ title: "", price: "", location: "", capacity: "", image: "", description: "" })
+  const [selectedCompanyId, setSelectedCompanyId] = useState<string>("")
+  const [offerForm, setOfferForm] = useState({ eventId: "", price: 0, galleryImages: "" as string | string[], policies: "", testimonials: "" })
+
+  // All effects come after state declarations
+  useEffect(() => {
+    // Force re-render when bookings change
+    forceUpdate({})
+  }, [bookings])
+
   useEffect(() => {
     if (!isLoading && user && user.role !== "planner" && user.role !== "admin") {
       // non-planner users shouldn't access company dashboard
@@ -27,21 +45,8 @@ export default function CompanyDashboardPage() {
     }
   }, [user, isLoading, router])
 
+  // Early returns must come after all hooks
   if (isLoading) return null
-
-  // Unauthenticated: show login + register (company) flows
-  const [showLogin, setShowLogin] = useState(true)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [name, setName] = useState("") // user full name for signup
-
-  // Company form for registration (when signing up)
-  const [companyName, setCompanyName] = useState("")
-  const [companyDesc, setCompanyDesc] = useState("")
-
-  const [eventForm, setEventForm] = useState({ title: "", price: "", location: "", capacity: "", image: "", description: "" })
-  const [selectedCompanyId, setSelectedCompanyId] = useState<string>("")
-  const [offerForm, setOfferForm] = useState({ eventId: "", price: 0, galleryImages: "" as string | string[], policies: "", testimonials: "" })
 
   const handleLogin = async () => {
     const ok = await login(email, password)
@@ -417,44 +422,56 @@ export default function CompanyDashboardPage() {
 
                   {/* Event Requests Tab */}
                   <TabsContent value="requests" className="space-y-4">
-                    <h4 className="font-semibold text-lg">Incoming Event Requests</h4>
                     {(() => {
                       const companyRequests = bookings.filter(
                         (b) => b.companyId === c.id && b.status === "pending"
                       )
-                      return companyRequests.length === 0 ? (
-                        <p className="text-muted-foreground py-4">No pending event requests</p>
-                      ) : (
-                        <div className="space-y-3">
-                          {companyRequests.map((booking) => {
-                            const event = events.find((e) => e.id === booking.eventId)
-                            const customer = users.find((u) => u.id === booking.userId)
-                            if (!event || !customer) return null
-                            return (
-                              <Card key={booking.id}>
-                                <CardContent className="p-4 flex items-center justify-between">
-                                  <div>
-                                    <h5 className="font-semibold">{event.title}</h5>
-                                    <p className="text-sm text-muted-foreground">
-                                      Requested by {customer.name} on {new Date(booking.date).toLocaleDateString()} at {booking.time}
-                                    </p>
-                                    <p className="text-sm font-bold text-primary">Total: ₹{booking.totalPrice.toLocaleString()}</p>
-                                  </div>
-                                  <div className="flex gap-2">
-                                    <Button size="sm" onClick={() => handleUpdateOfferRequest(booking.id, "confirmed")} className="gap-1">
-                                      <Check className="w-4 h-4" />
-                                      Accept
-                                    </Button>
-                                    <Button size="sm" variant="destructive" onClick={() => handleUpdateOfferRequest(booking.id, "cancelled")} className="gap-1">
-                                      <X className="w-4 h-4" />
-                                      Reject
-                                    </Button>
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            )
-                          })}
-                        </div>
+                      return (
+                        <>
+                          <div className="flex items-center justify-between">
+                            <h4 className="font-semibold text-lg">
+                              Incoming Event Requests {companyRequests.length > 0 && <span className="text-xs bg-red-500 text-white rounded-full px-2 py-1 ml-2">({companyRequests.length})</span>}
+                            </h4>
+                          </div>
+                          {companyRequests.length === 0 ? (
+                            <Card className="border-dashed">
+                              <CardContent className="p-6 text-center text-muted-foreground">
+                                <p>No pending event requests</p>
+                              </CardContent>
+                            </Card>
+                          ) : (
+                            <div className="space-y-3">
+                              {companyRequests.map((booking) => {
+                                const event = events.find((e) => e.id === booking.eventId)
+                                const customer = users.find((u) => u.id === booking.userId)
+                                if (!event || !customer) return null
+                                return (
+                                  <Card key={booking.id}>
+                                    <CardContent className="p-4 flex items-center justify-between">
+                                      <div>
+                                        <h5 className="font-semibold">{event.title}</h5>
+                                        <p className="text-sm text-muted-foreground">
+                                          Requested by {customer.name} on {new Date(booking.date).toLocaleDateString()} at {booking.time}
+                                        </p>
+                                        <p className="text-sm font-bold text-primary">Total: ₹{booking.totalPrice.toLocaleString()}</p>
+                                      </div>
+                                      <div className="flex gap-2">
+                                        <Button size="sm" onClick={() => handleUpdateOfferRequest(booking.id, "confirmed")} className="gap-1">
+                                          <Check className="w-4 h-4" />
+                                          Accept
+                                        </Button>
+                                        <Button size="sm" variant="destructive" onClick={() => handleUpdateOfferRequest(booking.id, "cancelled")} className="gap-1">
+                                          <X className="w-4 h-4" />
+                                          Reject
+                                        </Button>
+                                      </div>
+                                    </CardContent>
+                                  </Card>
+                                )
+                              })}
+                            </div>
+                          )}
+                        </>
                       )
                     })()}
                   </TabsContent>

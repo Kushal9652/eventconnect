@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import type { Event, Booking, Review, Testimonial, Query, User, Company, EventCompanyOffer } from "./types"
-import { mockEvents, mockTestimonials, mockUsers, mockCompanies, mockEventCompanyOffers } from "./mock-data"
+import { mockEvents, mockTestimonials, mockUsers, mockCompanies, mockEventCompanyOffers, mockBookings } from "./mock-data"
 
 interface DataContextType {
   events: Event[]
@@ -60,7 +60,18 @@ export function DataProvider({ children }: { children: ReactNode }) {
     const storedOffers = localStorage.getItem("eventconnect_offers")
 
     setEvents(storedEvents ? JSON.parse(storedEvents) : mockEvents)
-    setBookings(storedBookings ? JSON.parse(storedBookings) : [])
+    // normalize persisted bookings: ensure required fields like status exist
+    if (storedBookings) {
+      try {
+        const persistedBookings: Booking[] = JSON.parse(storedBookings)
+        const normalized = persistedBookings.map((b) => ({ ...b, status: (b as any).status ?? "pending" }))
+        setBookings(normalized)
+      } catch {
+        setBookings(mockBookings)
+      }
+    } else {
+      setBookings(mockBookings)
+    }
     setReviews(storedReviews ? JSON.parse(storedReviews) : [])
     setTestimonials(storedTestimonials ? JSON.parse(storedTestimonials) : mockTestimonials)
     setQueries(storedQueries ? JSON.parse(storedQueries) : [])
@@ -116,6 +127,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const addBooking = (booking: Omit<Booking, "id" | "createdAt">) => {
     const newBooking: Booking = {
       ...booking,
+      status: booking.status ?? "pending",
       id: `booking_${Date.now()}`,
       createdAt: new Date().toISOString(),
     }
